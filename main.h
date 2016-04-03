@@ -10,7 +10,9 @@
 #define FCNN_TRAIN_MAIN_H
 
 namespace PTFC {
-    //Stuff coming soon.
+
+    static fcnn::MLPNet net;
+    static fcnn::Dataset dataset;
 }
 
 #endif //FCNN_TRAIN_MAIN_H

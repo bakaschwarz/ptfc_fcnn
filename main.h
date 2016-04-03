@@ -5,14 +5,11 @@
 #include <fcnn.h>
 #include <string>
 #include <CmdLine.h>
+#include <ArgException.h>
 
 #ifndef FCNN_TRAIN_MAIN_H
 #define FCNN_TRAIN_MAIN_H
 
-namespace PTFC {
-
-    static fcnn::MLPNet net;
-    static fcnn::Dataset dataset;
-}
+static bool fexists(const char* filename);
 
 #endif //FCNN_TRAIN_MAIN_H

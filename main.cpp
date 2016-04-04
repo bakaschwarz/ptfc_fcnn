@@ -28,7 +28,7 @@ int main(int argc, const char** argv) {
         TCLAP::SwitchArg printInfo(
                 "",
                 "print_info",
-                "Using this will cause the program to print information about the net and the training data."
+                "Using this will cause the program to print information about the net and the training data. The information is JSON formatted for easy parsing."
         );
         TCLAP::MultiArg<int> layers(
                 "l",
@@ -85,21 +85,22 @@ int main(int argc, const char** argv) {
         bool newNet = false;
         if(fexists(neuralnetPath))
         {
-            std::cout << "Net exists!" << std::endl; //TODO
             net.load(neuralnetPath);
         }
         else
         {
             net.construct(layers.getValue());
+            net.set_name("This network was generated using ptfc_fann.");
             newNet = true;
         }
 
         if(fexists(datasetPath))
         {
-            std::cout << trainingPath.getValue() << std::endl; //TODO
             if(!dataset.load(datasetPath, true))
-                std::cerr << "oh no" << std::endl;
-            std::cout << dataset.get_info() << std::endl;
+            {
+                std::cerr << "Could not read dataset!" << std::endl;
+                exit(-1);
+            }
         }
         else
         {
@@ -110,7 +111,24 @@ int main(int argc, const char** argv) {
 
         if(printInfo.getValue())
         {
-            //TODO Print some info about the net and the training data
+            std::cout << "{" << std::endl;
+            std::cout << "\t\"NEURALNET\": {" << std::endl;
+            std::cout << "\t\t\"DESCRIPTION\": \"" << net.get_name() << "\"," << std::endl;
+            std::printf("\t\t\"NUMBERLAYERS\": %i,\n", net.no_layers());
+            std::cout << "\t\t\"LAYERS\": [" << std::endl;
+            for(int i = 1; i <= net.no_layers(); i++)
+            {
+                std::printf("\t\t\t{ \"%i\": %i}", i, net.no_neurons(i));
+                if(i != net.no_layers())
+                {
+                    std::cout << ",";
+                }
+                std::cout << std::endl;
+            }
+            std::cout << "\t\t]" << std::endl;
+            std::cout << "\t}," << std::endl;
+            std::cout << "\t\"DATASETDESCRIPTION\": \"" << dataset.get_info() << "\"" << std::endl;
+            std::cout << "}" << std::endl;
         }
         else if(test.getValue())
         {

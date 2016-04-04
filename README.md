@@ -1,6 +1,6 @@
 # ptfc_fcnn
 
-This program is an addition to the [ptfc](https://github.com/bakaschwarz/ptfc]) software and is needed to train and test neural nets using the FCNN library.
+This program is an addition to the [ptfc](https://github.com/bakaschwarz/ptfc) software and is needed to train and test neural nets using the FCNN library.
 
 For usage help use the `-h` or `--help` command.
 

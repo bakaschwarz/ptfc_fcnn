@@ -10,6 +10,6 @@
 #ifndef FCNN_TRAIN_MAIN_H
 #define FCNN_TRAIN_MAIN_H
 
-static bool fexists(const char* filename);
+static inline bool fexists(const char* filename);
 
 #endif //FCNN_TRAIN_MAIN_H

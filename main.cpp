@@ -25,13 +25,10 @@ int main(int argc, const char** argv) {
                 "",
                 "/path/to/training.dat"
         );
-        TCLAP::ValueArg<std::string> printInfo(
+        TCLAP::SwitchArg printInfo(
                 "",
                 "print_info",
-                "Using this will cause the program to give information about the specified file and prevents any training. Possible values: training, neuralnet",
-                false,
-                "",
-                "training/neuralnet"
+                "Using this will cause the program to print information about the net and the training data."
         );
         TCLAP::MultiArg<int> layers(
                 "l",
@@ -61,6 +58,15 @@ int main(int argc, const char** argv) {
                 5000,
                 "int"
         );
+        TCLAP::ValueArg<int> freq(
+                "f",
+                "frequency",
+                "Sets the frequency for the reports. Default: 10",
+                false,
+                10,
+                "int"
+        );
+        cmd.add(freq);
         cmd.add(epoches);
         cmd.add(error);
         cmd.add(test);
@@ -76,7 +82,7 @@ int main(int argc, const char** argv) {
         fcnn::Dataset<float> dataset;
         const char* neuralnetPath = netPath.getValue().c_str();
         const char* datasetPath = trainingPath.getValue().c_str();
-
+        bool newNet = false;
         if(fexists(neuralnetPath))
         {
             std::cout << "Net exists!" << std::endl; //TODO
@@ -85,19 +91,54 @@ int main(int argc, const char** argv) {
         else
         {
             net.construct(layers.getValue());
+            newNet = true;
         }
 
         if(fexists(datasetPath))
         {
-            std::cout << "Dataset exists" << std::endl; //TODO
-            dataset.load(datasetPath);
+            std::cout << trainingPath.getValue() << std::endl; //TODO
+            if(!dataset.load(datasetPath))
+                std::cerr << "oh no" << std::endl;
+            std::cout << dataset.get_info() << std::endl;
         }
         else
         {
-            std::cerr << "No dataset found!" << std::endl;
+            std::cerr << "No dataset found!" << std::endl; //TODO
             exit(-1);
         }
         //endregion
+
+        if(printInfo.getValue())
+        {
+            //TODO Print some info about the net and the training data
+        }
+        else
+        {
+            //region Configure net
+            if(newNet)
+            {
+                for(int i = 2; i <= layers.getValue().size(); i++)
+                {
+                    net.set_act_f(i, fcnn::sigmoid);
+                }
+                net.rnd_weights(); //Randomize the weights
+            }
+            else
+            {
+                //TODO Is there even something to do?
+            }
+            //endregion
+
+            //region Teach the net
+            std::cout << "Starting training of the neural net..." << std::endl;
+            fcnn::mlpnet_teach_rprop(net, dataset, error.getValue(), epoches.getValue(), freq.getValue());
+            //endregion
+
+            //region Save the net
+            std::cout << "Finished training!\nNow saving..." << std::endl;
+            net.save(neuralnetPath);
+            //endregion
+        }
     }
     catch (TCLAP::ArgException &e)
     {
@@ -107,8 +148,10 @@ int main(int argc, const char** argv) {
 }
 
 
-bool fexists(const char* filename) {
+inline bool fexists(const char* filename) {
     std::ifstream ifile(filename);
-    return (bool) ifile;
+    bool ret = (bool) ifile;
+    ifile.close();
+    return ret;
 }
 

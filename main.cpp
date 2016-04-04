@@ -97,7 +97,7 @@ int main(int argc, const char** argv) {
         if(fexists(datasetPath))
         {
             std::cout << trainingPath.getValue() << std::endl; //TODO
-            if(!dataset.load(datasetPath))
+            if(!dataset.load(datasetPath, true))
                 std::cerr << "oh no" << std::endl;
             std::cout << dataset.get_info() << std::endl;
         }
@@ -119,7 +119,7 @@ int main(int argc, const char** argv) {
             {
                 std::cout << "Start testing the network..." << std::endl;
                 float mse = net.mse(dataset);
-                std::printf("Test finished!\nThe mean squared error is %f\n", mse);
+                std::printf("Test finished!\nMSE: %f\n", mse);
             }
             else
             {

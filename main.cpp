@@ -112,6 +112,22 @@ int main(int argc, const char** argv) {
         {
             //TODO Print some info about the net and the training data
         }
+        else if(test.getValue())
+        {
+            //region Test neural net
+            if(!newNet)
+            {
+                std::cout << "Start testing the network..." << std::endl;
+                float mse = net.mse(dataset);
+                std::printf("Test finished!\nThe mean squared error is %f\n", mse);
+            }
+            else
+            {
+                std::cerr << "Can't test on a not existing network!" << std::endl;
+                exit(-1);
+            }
+            //endregion
+        }
         else
         {
             //region Configure net

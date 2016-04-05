@@ -38,6 +38,7 @@ fcnn::internal::report(const std::string &s)
     Rprintf((s + '\n').c_str());
 #else
     std::cout << s << '\n';
+    fflush(stdout);
 #endif
 }
 

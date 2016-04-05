@@ -111,6 +111,7 @@ int main(int argc, const char** argv) {
 
         if(printInfo.getValue())
         {
+            //region Print information in JSON format
             std::cout << "{" << std::endl;
             std::cout << "\t\"NEURALNET\": {" << std::endl;
             std::cout << "\t\t\"DESCRIPTION\": \"" << net.get_name() << "\"," << std::endl;
@@ -129,6 +130,7 @@ int main(int argc, const char** argv) {
             std::cout << "\t}," << std::endl;
             std::cout << "\t\"DATASETDESCRIPTION\": \"" << dataset.get_info() << "\"" << std::endl;
             std::cout << "}" << std::endl;
+            //endregion
         }
         else if(test.getValue())
         {

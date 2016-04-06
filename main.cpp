@@ -66,6 +66,15 @@ int main(int argc, const char** argv) {
                 10,
                 "int"
         );
+        TCLAP::ValueArg<float> learnRate(
+                "r",
+                "learn_rate",
+                "Sets the learning rate for this training session",
+                false,
+                0.5,
+                "float"
+        );
+        cmd.add(learnRate);
         cmd.add(freq);
         cmd.add(epoches);
         cmd.add(error);
@@ -167,7 +176,7 @@ int main(int argc, const char** argv) {
 
             //region Teach the net
             std::cout << "Starting training of the neural net..." << std::endl;
-            fcnn::mlpnet_teach_rprop(net, dataset, error.getValue(), epoches.getValue(), freq.getValue());
+            fcnn::mlpnet_teach_bp(net, dataset, error.getValue(), epoches.getValue(), learnRate.getValue() ,freq.getValue());
             //endregion
 
             //region Save the net

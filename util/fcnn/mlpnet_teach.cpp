@@ -28,6 +28,7 @@
 #include <utils.h>
 #include <report.h>
 #include <error.h>
+#include <algorithm>
 
 
 using namespace fcnn;

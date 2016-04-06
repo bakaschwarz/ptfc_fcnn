@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.4)
 project(fcnn_train)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+if(NOT UNIX)
+    set(CMAKE_C_COMPILER cl.exe) #TODO Very rudimental Windows VS Support. Needs way more than that
+endif()
 
 add_subdirectory(util/fcnn)
 add_subdirectory(util/tclap)

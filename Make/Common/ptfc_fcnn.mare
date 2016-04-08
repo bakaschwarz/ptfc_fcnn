@@ -1,0 +1,15 @@
+ptfc_fcnn = cppApplication + {
+
+  root = "$(srcDirRoot)"
+  files = {
+    "$(srcDirRoot)/main.cpp" = cppSource
+    "$(srcDirroot)/main.h"
+    "$(utilDirRoot)/fcnn/include/**.cpp" = cppSource
+    "$(utilDirRoot)/fcnn/include/**.h"
+  }
+
+  includePaths = {
+    "$(utilDirRoot)/fcnn/include"
+    "$(utilDirRoot)/tclap/include"
+  }
+}

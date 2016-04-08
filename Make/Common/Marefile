@@ -1,0 +1,86 @@
+name = "B-Human"
+
+srcDirRoot = "../../Src"
+buildDirRoot = "../../Build"
+utilDirRoot = "../../Util"
+buildPlatformDir = {
+  if (host == "Win32" && platform != "Linux") {
+    "$(buildDirRoot)/Windows"
+  } else {
+    "$(buildDirRoot)/$(platform)"
+  }
+}
+buildDir = "$(buildPlatformDir)/$(target)/$(configuration)"
+
+configurations = {
+  Debug
+  Release
+}
+
+if (tool == "vcxproj") {
+  platforms = { "x64" }
+}
+
+OS = {
+  if (platform == "Linux") {
+    "Linux"
+  } else if (host == "Win32") {
+    "Windows"
+  } else if (platform == "MacOSX") {
+    "OSX"
+  }
+}
+
+if (host == "Linux") {
+  cppCompiler = {
+    "clang++ -D__extern_always_inline=inline"
+  }
+}
+
+cppFlags = {
+  if (tool == "vcxproj") {
+    "/W3" // warning level 3
+    "/GF" // enable string pooling
+    "/Gm- /MP" // disable minimal rebuild and enable multi processor compilation
+    "/Zc:wchar_t-" // required for Qt
+    if (configuration == "Debug") {
+      "/Od /ZI"
+    } else {
+      "/Ox /Ob2 /Oi /Ot /Oy /GT"
+    }
+  } else {
+    "-std=c++11"
+    "-pipe"
+    "-mssse3"
+    "-fPIC"
+    "-Wall"
+    //"-Wconversion" // Activate thit again, as soon as qt get rid of its conversion warnings.
+    "-Wliteral-conversion"
+    "-Wsign-compare"
+    if (configuration == "Debug") {
+      "-g"
+    } else {
+      "-O3 -fomit-frame-pointer"
+    }
+  }
+}
+
+linkFlags = {
+  if (tool == "vcxproj") {
+    "/SUBSYSTEM:WINDOWS"
+    if (configuration == "Debug") {
+      "/INCREMENTAL /DEBUG"
+    } else {
+          "/OPT:REF /OPT:ICF"
+    }
+  } else {
+    if (configuration != "Debug") {
+      "-s"
+    }
+  }
+}
+
+targets = {
+ include "ptfc_fcnn.mare"
+}
+

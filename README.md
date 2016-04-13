@@ -4,9 +4,13 @@ This program is an addition to the [ptfc](https://github.com/bakaschwarz/ptfc) s
 
 For usage help use the `-h` or `--help` command.
 
-# Build
+# Build for Linux
 
-    cmake . && make
+    cd /path/to/ptfc_fcnn_root/Make/Linux/ && make
+
+# Build for Windows
+
+*Coming soon*
 
 # 3rd Party Licence Stuff
 
